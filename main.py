@@ -1,7 +1,7 @@
-def get_todps():
-    with open("files/todos.txt", "r") as file:
-        todos = file.readlines()
-    return todos
+def get_todos_local(filepath):
+    with open(filepath, "r") as file_local:
+        todos_local= file_local.readlines()
+    return todos_local
 
 
 while True:
@@ -10,14 +10,14 @@ while True:
     user_action = user_action.strip()
     if user_action.startswith("add"):
         todo = user_action[4:]          
-        todos = get_todps()
+        todos = get_todos_local()
         todos.append(todo + '\n')
 
         with open("files/todos.txt", "w") as file:
             file.writelines(todos)
                     
     elif user_action.startswith("show"):            
-        todos = get_todps()
+        todos = get_todos_local("todos.txt")
 
         # new_todos = [item.strip('\n') for item in todos]
 
@@ -30,7 +30,7 @@ while True:
             number = int(user_action[5:]) 
             print(number)
             number = number - 1
-            todos = get_todps()             
+            todos = get_todos_local("todos.txt")
             
             new_todo = input("Enter new todo: ")
             todos[number] = new_todo + "\n"
@@ -46,7 +46,7 @@ while True:
     elif user_action.startswith("complete"):
         try:
             number = int(user_action[9:])
-            todos = get_todps()
+            todos = get_todos_local("todos.txt")
             index = number - 1
             todo_to_remove = todos[index].strip('\n')   
             todos.pop(index)
