@@ -1,0 +1,19 @@
+import math
+import turtle
+from turtle import *
+
+def heart(k):
+    return 15*math.sin(k)**3
+def heartb(k):
+    return 12*math.cos(k)-5*\
+    math.cos(2*k)-2*\
+    math.cos(3*k)-\
+    math.cos(4*k)
+speed(0)
+bgcolor('black')
+for i in range(6000):
+    goto(heart(i)*40, heartb(i)*40)
+    for j in range(5):
+        color('purple')
+    goto(0, 0)
+done()
