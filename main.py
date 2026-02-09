@@ -1,9 +1,10 @@
-def get_todos_local(filepath):
+def get_todos_local(filepath = "todos.txt"):
+        """Read a text file and return the list of to-do items."""
         with open(filepath, "r") as file_local:
             todos_local= file_local.readlines()
         return todos_local
 
-def write_todos(filepath, todos_arg):
+def write_todos(todos_arg, filepath = "todos.txt"):
     with open (filepath, "w") as file:
         file.writelines(todos_arg)
 
@@ -14,10 +15,10 @@ while True:
     user_action = user_action.strip()
     if user_action.startswith("add"):
         todo = user_action[4:]          
-        todos = get_todos_local("files/todos.txt")
+        todos = get_todos_local()
         todos.append(todo + '\n')
 
-        write_todos("files/todos.txt", todos)
+        write_todos(todos)
                     
     elif user_action.startswith("show"):            
         todos = get_todos_local("files/todos.txt")
@@ -33,11 +34,11 @@ while True:
             number = int(user_action[5:]) 
             print(number)
             number = number - 1
-            todos = get_todos_local("files/todos.txt")
+            todos = get_todos_local()
             
             new_todo = input("Enter new todo: ")
             todos[number] = new_todo + "\n"
-            write_todos("files/todos.txt", todos)
+            write_todos(todos)
         except ValueError:
             print("Your command is not valid.")
             continue
@@ -50,7 +51,7 @@ while True:
     elif user_action.startswith("complete"):
         try:
             number = int(user_action[9:])
-            todos = get_todos_local("files/todos.txt")
+            todos = get_todos_local()
             index = number - 1
             todo_to_remove = todos[index].strip('\n')   
             todos.pop(index)
