@@ -1,72 +1,51 @@
-def get_todos_local(filepath = "todos.txt"):
-        """Read a text file and return the list of to-do items."""
-        with open(filepath, "r") as file_local:
-            todos_local= file_local.readlines()
-        return todos_local
-
-def write_todos(todos_arg, filepath = "todos.txt"):
-    with open (filepath, "w") as file:
-        file.writelines(todos_arg)
-
+from modules import functions
 
 while True:
-    # Get user input and strip chars it 
-    user_action = input("Type add, show, edit, complete or exit:")
-    user_action = user_action.strip()
+    user_action = input("Type add, show, edit, complete or exit: ").strip()
+
     if user_action.startswith("add"):
-        todo = user_action[4:]          
-        todos = get_todos_local()
-        todos.append(todo + '\n')
+        todo = user_action[4:].strip()
+        if not todo:
+            todo = input("Enter a todo: ").strip()
 
-        write_todos(todos)
-                    
-    elif user_action.startswith("show"):            
-        todos = get_todos_local("files/todos.txt")
+        if todo:
+            todos = functions.get_todos_local()
+            todos.append(todo + "\n")
+            functions.write_todos(todos)
+        else:
+            print("Todo is empty.")
 
-        # new_todos = [item.strip('\n') for item in todos]
-
+    elif user_action.startswith("show"):
+        todos = functions.get_todos_local()
         for index, item in enumerate(todos):
-            item = item.strip('\n')
-            print (f"{index + 1}-{item.capitalize()}")
-            
-    elif user_action.startswith("edit"):
-        try:        
-            number = int(user_action[5:]) 
-            print(number)
-            number = number - 1
-            todos = get_todos_local()
-            
-            new_todo = input("Enter new todo: ")
-            todos[number] = new_todo + "\n"
-            write_todos(todos)
-        except ValueError:
-            print("Your command is not valid.")
-            continue
-        except IndexError:
-            print("There is no item with that number.")
-            continue
+            print(f"{index + 1}-{item.strip().capitalize()}")
 
-            
-         
+    elif user_action.startswith("edit"):
+        try:
+            number = int(user_action.split()[1]) - 1
+            todos = functions.get_todos_local()
+            new_todo = input("Enter new todo: ").strip()
+            if new_todo:
+                todos[number] = new_todo + "\n"
+                functions.write_todos(todos)
+            else:
+                print("Todo is empty.")
+        except (IndexError, ValueError):
+            print("Your command is not valid.")
+
     elif user_action.startswith("complete"):
         try:
-            number = int(user_action[9:])
-            todos = get_todos_local()
-            index = number - 1
-            todo_to_remove = todos[index].strip('\n')   
-            todos.pop(index)
-
-            with open("files/todos.txt", "w") as file:
-                file.writelines(todos)
-            message = f"Todo: '{todo_to_remove}' was removed from the list."
-            print(message)
-        except IndexError:
+            number = int(user_action.split()[1]) - 1
+            todos = functions.get_todos_local()
+            todo_to_remove = todos.pop(number).strip("\n")
+            functions.write_todos(todos)
+            print(f"Todo: '{todo_to_remove}' was removed from the list.")
+        except (IndexError, ValueError):
             print("There is no item with that number.")
-            continue
-        
-        
-    elif user_action.startswith("exit"):
+
+    elif user_action == "exit":
         break
     else:
         print("Command not valid.")
+
 print("Bye!")
